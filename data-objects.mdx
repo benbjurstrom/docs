@@ -22,7 +22,7 @@ public function store(CreateUserRequest $request): UserObject
 }
 ```
 
-Data objects integrate naturally with Laravel's existing features. They work seamlessly with [form requests](/docs/12.x/validation#form-request-validation), [Eloquent models](/docs/12.x/eloquent), and [HTTP responses](/docs/12.x/responses). When returned from a controller, data objects automatically serialize to JSON, making them perfect for APIs and tools like [Wayfinder](https://github.com/laravel/wayfinder) that generate TypeScript types from your Laravel code.
+Data objects integrate naturally with Laravel's existing features. They work seamlessly with [form requests](https://laravel.com/docs/12.x/validation#form-request-validation), [Eloquent models](https://laravel.com/docs/12.x/eloquent), and [HTTP responses](https://laravel.com/docs/12.x/responses). When returned from a controller, data objects automatically serialize to JSON, making them perfect for APIs and tools like [Wayfinder](https://github.com/laravel/wayfinder) that generate TypeScript types from your Laravel code.
 
 ## Generating Objects
 
@@ -259,7 +259,7 @@ public function store(CreateUserRequest $request)
 }
 ```
 
-Remember that [form request validation](/docs/12.x/validation#form-request-validation) occurs before your controller method is invoked. The `toObject` method simply hydrates a typed object from the already-validated data, the typed equivalent of calling `$request->validated()`.
+Remember that [form request validation](https://laravel.com/docs/12.x/validation#form-request-validation) occurs before your controller method is invoked. The `toObject` method simply hydrates a typed object from the already-validated data, the typed equivalent of calling `$request->validated()`.
 
 ### Inferring Validation Rules
 

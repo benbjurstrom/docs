@@ -14,8 +14,8 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting Started",
-            "pages": ["index", "data-objects"]
+            "group": "Documentation",
+            "pages": ["data-objects"]
           }
         ]
       }
@@ -24,5 +24,8 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
+  },
+  "codeBlock": {
+    "theme": "nord"
   }
 }
