@@ -25,7 +25,9 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
-  "codeBlock": {
-    "theme": "nord"
+  "styling": {
+    "codeblocks": {
+      "theme": "dracula"
+    }
   }
 }

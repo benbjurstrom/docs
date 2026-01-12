@@ -9,7 +9,7 @@ When building applications with Laravel, you may find yourself working with unty
 
 Data objects solve this problem by providing typed PHP classes that serve as containers for your data. They preserve type information as data flows through your application:
 
-```php
+```php icon=php
 public function store(CreateUserRequest $request): UserObject
 {
     $object = $request->toObject();
@@ -28,13 +28,13 @@ Data objects integrate naturally with Laravel's existing features. They work sea
 
 To create a data object, you may use the `make:object` Artisan command:
 
-```shell
+```shell icon=terminal
 php artisan make:object UserObject
 ```
 
 You may also generate an object from an existing model's database schema:
 
-```shell
+```shell icon=terminal
 php artisan make:object UserObject --from-model
 ```
 
@@ -42,7 +42,7 @@ php artisan make:object UserObject --from-model
 
 At their most basic, data objects are simple PHP classes with typed public properties that extend the base `DataObject` class:
 
-```php
+```php icon=php
 <?php
 
 namespace App\Objects;
@@ -66,7 +66,7 @@ Data objects support all native PHP types. Non-nullable properties are considere
 
 If your data object represents an Eloquent model, you may specify the model class using the `$model` property:
 
-```php
+```php icon=php
 <?php
 
 namespace App\Objects;
@@ -90,7 +90,7 @@ This association enables the `toModel()` method, which converts your data object
 
 Data objects support all PHP native types, backed enums, and several complex types out of the box. Laravel automatically handles type conversion during hydration:
 
-```php
+```php icon=php
 class EventObject extends DataObject
 {
     public string $name;
@@ -114,7 +114,7 @@ class EventObject extends DataObject
 
 By default, property names must match input keys exactly. If your database uses `snake_case` but you prefer `camelCase` properties, you may use the `CamelCaseProperties` trait:
 
-```php
+```php icon=php
 use Illuminate\Foundation\DataObject\Concerns\CamelCaseProperties;
 
 class UserObject extends DataObject
@@ -128,7 +128,7 @@ class UserObject extends DataObject
 
 For individual properties that need custom mapping, use the `MapFrom` attribute:
 
-```php
+```php icon=php
 use Illuminate\Foundation\DataObject\Attributes\MapFrom;
 
 class UserObject extends DataObject
@@ -145,7 +145,7 @@ class UserObject extends DataObject
 
 Properties may define default values using standard PHP syntax:
 
-```php
+```php icon=php
 class SettingsObject extends DataObject
 {
     public bool $notifications = true;
@@ -156,7 +156,7 @@ class SettingsObject extends DataObject
 
 For computed defaults that cannot be expressed as PHP constants, define a `defaults` method:
 
-```php
+```php icon=php
 class ArticleObject extends DataObject
 {
     public string $title;
@@ -177,7 +177,7 @@ class ArticleObject extends DataObject
 
 You may create data object instances directly using named arguments:
 
-```php
+```php icon=php
 $order = new OrderObject(
     order_number: 'ORD-123',
     status: OrderStatus::Pending,
@@ -187,7 +187,7 @@ $order = new OrderObject(
 
 Alternatively, the static `from` method accepts an array and handles type coercion automatically:
 
-```php
+```php icon=php
 $order = OrderObject::from([
     'order_number' => 'ORD-123',
     'status' => 'pending',        // String coerced to enum
@@ -197,7 +197,7 @@ $order = OrderObject::from([
 
 Use a single object type when input and output share the same shape. Create separate objects when they differ:
 
-```php
+```php icon=php
 // Input object - accepts password for creation
 class CreateUserObject extends DataObject
 {
@@ -223,7 +223,7 @@ For most use cases, you'll create objects through [form requests](#using-objects
 
 One of the most powerful uses for data objects is converting validated form request data into typed objects. To associate a data object with a form request, you may use the `$object` property:
 
-```php
+```php icon=php
 <?php
 
 namespace App\Http\Requests;
@@ -248,7 +248,7 @@ class CreateUserRequest extends FormRequest
 
 Once configured, you may call the `toObject` method on the request to get a typed data object containing the validated data:
 
-```php
+```php icon=php
 public function store(CreateUserRequest $request)
 {
     $user = $request->toObject();
@@ -265,7 +265,7 @@ Remember that [form request validation](https://laravel.com/docs/12.x/validation
 
 The `objectRules` method generates base validation rules from your object's property types, which you can merge with additional constraints:
 
-```php
+```php icon=php
 class CreateUserRequest extends FormRequest
 {
     protected string $object = CreateUserObject::class;
@@ -289,7 +289,7 @@ class CreateUserRequest extends FormRequest
 
 A single data object can serve both create and update operations. When handling updates, pass the existing model to `toObject` using the `model` parameter:
 
-```php
+```php icon=php
 public function update(UpdateUserRequest $request, User $user)
 {
     return $request->toObject(model: $user)->toModel()->save();
@@ -302,7 +302,7 @@ The `model` parameter provides the model's current data as a base (with request 
 
 Data objects can be created manually using the static `from` method, bypassing form request validation entirely. When writing service methods that accept data objects, you may want to ensure the object was created through proper validation:
 
-```php
+```php icon=php
 class UserService
 {
     public function create(UserObject $user): User
@@ -324,7 +324,7 @@ Data objects work bidirectionally with Eloquent models. You can convert models t
 
 To enable data object conversion on a model, use the `HasObject` trait:
 
-```php
+```php icon=php
 <?php
 
 namespace App\Models;
@@ -340,7 +340,7 @@ class User extends Model
 
 The trait provides a `toObject` method that converts the model to its corresponding data object:
 
-```php
+```php icon=php
 $user = User::find(1);
 $object = $user->toObject();
 
@@ -352,7 +352,7 @@ By convention, Laravel will look for a data object class in the `App\Objects` na
 
 If your data object class doesn't follow this convention, you may specify the default object using the `UseObject` attribute:
 
-```php
+```php icon=php
 use App\Objects\CustomUserObject;
 use Illuminate\Database\Eloquent\Attributes\UseObject;
 
@@ -367,7 +367,7 @@ class User extends Model
 
 When your data object has a `$model` association, you may convert it back to an Eloquent model using the `toModel` method:
 
-```php
+```php icon=php
 $data = $request->toObject();
 
 $user = $data->toModel();
@@ -380,7 +380,7 @@ For updates, pass the existing model via the `model:` parameter. Calling `toMode
 
 ### Object Collections
 
-```php
+```php icon=php
 $users = User::all();
 $userObjects = UserObject::collection($users);
 
@@ -391,7 +391,7 @@ foreach ($userObjects as $user) {
 
 For convenience, you may also call `toObjects` directly on an Eloquent collection:
 
-```php
+```php icon=php
 $userObjects = User::all()->toObjects();
 ```
 
@@ -399,7 +399,7 @@ $userObjects = User::all()->toObjects();
 
 Data objects may contain other data objects as properties:
 
-```php
+```php icon=php
 class OrderObject extends DataObject
 {
     protected static string $model = Order::class;
@@ -418,7 +418,7 @@ When using `objectRules()` with nested objects, Laravel automatically generates 
 
 Data objects may be used as Eloquent casts for JSON columns:
 
-```php
+```php icon=php
 class Order extends Model
 {
     protected $casts = [
@@ -427,7 +427,7 @@ class Order extends Model
 }
 ```
 
-```php
+```php icon=php
 $order = Order::find(1);
 $order->shipping_address->street; // Typed!
 ```
@@ -436,13 +436,13 @@ $order->shipping_address->street; // Typed!
 
 Data objects can be automatically converted to TypeScript interfaces, providing end-to-end type safety from your Laravel backend to your frontend:
 
-```shell
+```shell icon=terminal
 php artisan object:typescript
 ```
 
 For example, this PHP data object:
 
-```php
+```php icon=php
 class OrderObject extends DataObject
 {
     public string $order_number;
@@ -462,7 +462,7 @@ enum OrderStatus: string
 
 Generates this TypeScript interface:
 
-```typescript
+```typescript icon=typescript
 interface OrderObject {
     order_number: string;
     customer: CustomerObject | null;
@@ -481,7 +481,7 @@ Type mismatches between data objects and their sources should be caught during d
 
 Larastan detects mismatches between your form request validation rules and data object property types:
 
-```php
+```php icon=php
 class CreateUserRequest extends FormRequest
 {
     protected string $object = UserObject::class;
@@ -501,7 +501,7 @@ PHPStan: Validation rule for 'age' produces string, but UserObject::$age expects
 
 It also detects mismatches between model `$casts` and data object types:
 
-```php
+```php icon=php
 #[UseObject(UserObject::class)]
 class User extends Model
 {
@@ -513,7 +513,7 @@ class User extends Model
 
 For teams using [Pest](https://pestphp.com), Laravel's Pest plugin provides architecture test helpers:
 
-```php
+```php icon=php
 arch('form request rules match data object types')
     ->expect('App\Http\Requests')
     ->toHaveMatchingDataObjectTypes();
